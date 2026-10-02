@@ -12,7 +12,11 @@ class Course(models.Model):
 
 
 class Lesson(models.Model):
-    course = models.ForeignKey(Course, related_name="lessons", on_delete=models.CASCADE)
+    course = models.ForeignKey(
+        Course,
+        related_name="lessons",
+        on_delete=models.CASCADE
+    )
     title = models.CharField(max_length=200)
     order = models.IntegerField(default=0)
 
@@ -24,7 +28,11 @@ class Lesson(models.Model):
 
 
 class Question(models.Model):
-    lesson = models.ForeignKey(Lesson, related_name="questions", on_delete=models.CASCADE)
+    lesson = models.ForeignKey(
+        Lesson,
+        related_name="questions",
+        on_delete=models.CASCADE
+    )
     question_text = models.CharField(max_length=500)
 
     def __str__(self):
@@ -32,7 +40,11 @@ class Question(models.Model):
 
 
 class Choice(models.Model):
-    question = models.ForeignKey(Question, related_name="choices", on_delete=models.CASCADE)
+    question = models.ForeignKey(
+        Question,
+        related_name="choices",
+        on_delete=models.CASCADE
+    )
     choice_text = models.CharField(max_length=200)
     is_correct = models.BooleanField(default=False)
 
@@ -41,7 +53,11 @@ class Choice(models.Model):
 
 
 class Submission(models.Model):
-    course = models.ForeignKey(Course, related_name="submissions", on_delete=models.CASCADE)
+    course = models.ForeignKey(
+        Course,
+        related_name="submissions",
+        on_delete=models.CASCADE
+    )
     student_name = models.CharField(max_length=200, default="Student")
     score = models.IntegerField(default=0)
     submitted_at = models.DateTimeField(auto_now_add=True)
@@ -51,10 +67,38 @@ class Submission(models.Model):
 
 
 class SubmissionAnswer(models.Model):
-    submission = models.ForeignKey(Submission, related_name="answers", on_delete=models.CASCADE)
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    selected_choice = models.ForeignKey(Choice, on_delete=models.SET_NULL, null=True, blank=True)
+    submission = models.ForeignKey(
+        Submission,
+        related_name="answers",
+        on_delete=models.CASCADE
+    )
+    question = models.ForeignKey(
+        Question,
+        on_delete=models.CASCADE
+    )
+    selected_choice = models.ForeignKey(
+        Choice,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
     is_correct = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.question.question_text} -> {self.selected_choice}"
+
+
+class Instructor(models.Model):
+    name = models.CharField(max_length=200)
+    email = models.EmailField(blank=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Learner(models.Model):
+    name = models.CharField(max_length=200)
+    email = models.EmailField(blank=True)
+
+    def __str__(self):
+        return self.name

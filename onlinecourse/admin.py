@@ -8,15 +8,20 @@ from .models import (
     Lesson,
     Question,
     Submission,
-    SubmissionAnswer,
+    Instructor,
+    Learner,
 )
 
+
+# Authentication and Authorization
 admin.site.unregister(User)
 admin.site.unregister(Group)
+
 admin.site.register(User, UserAdmin)
 admin.site.register(Group, GroupAdmin)
 
 
+# Course -> Questions -> Choices
 class ChoiceInline(admin.TabularInline):
     model = Choice
     extra = 4
@@ -46,5 +51,8 @@ class QuestionAdmin(admin.ModelAdmin):
     search_fields = ["question_text"]
 
 
+# Required OnlineCourse models
+admin.site.register(Choice)
 admin.site.register(Submission)
-admin.site.register(SubmissionAnswer)
+admin.site.register(Instructor)
+admin.site.register(Learner)
